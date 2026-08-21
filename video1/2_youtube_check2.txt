@@ -1,0 +1,718 @@
+0:09
+Host: Well, hello everyone, I'm Deb Goodkin, the Executive Director of the FreeBSD
+0:15
+Foundation. Thank you for joining us for our last FreeBSD Friday of the year. So these
+0:21
+are introductory presentations on various areas of
+0:27
+FreeBSD. and they're all recorded, so you can access them in the future. And if you
+0:32
+have any ideas or topics that you'd like us to cover in 2023, please post them here for
+0:41
+us, and we'll try to cover them next year. So before I introduce our speaker today,
+0:47
+I would just like to send out one last plea — actually, it won't be my last — but
+0:52
+another plea for you and folks that you know and companies that you work for, to
+0:59
+consider making a donation to us, the FreeBSD Foundation. When you invest or
+1:05
+when you donate to us, it is an investment in FreeBSD, the advancement of
+1:11
+FreeBSD, and it helps us fund software development projects to improve
+1:17
+FreeBSD. It helps us fund FreeBSD advocacy work all around the world.
+1:24
+It helps us fund training and coursework for bringing new folks into
+1:31
+the project. So please consider making a donation, and we'll put the URL in the
+1:37
+IRC channel. So moving on to our presenter for today,
+1:43
+Actually, before I introduce him, if you have any questions during his talk,
+1:49
+go ahead and post them either in the IRC channel. Actually, I think that's the only
+1:55
+place you can post it, so we'll put information there for you. So today our presentation is an
+2:03
+introduction to FreeBSD Services by Drew Gurkowski. So let me tell you a
+2:08
+little bit about Drew. He started working on FreeBSD documentation for the foundation as an
+2:15
+intern in 2015, and he continued as a consultant starting in 2018.
+2:21
+As of 2020, Drew began working full-time for us as a marketing coordinator.
+2:28
+He lives in New York City, and he recently built a new computer from scratch so he could learn more about
+2:35
+computers and that whole process. So now I'll hand it off to Drew.
+2:43
+Drew: Awesome, thank you so much for the introduction. So my name is Drew Gurkowski,
+2:48
+and today's FreeBSD Friday is just going to touch on a few of the services that can be
+2:55
+enabled right out of the box on a fresh FreeBSD install. So I want to touch on three
+3:01
+specific types of services: we're going to touch on multimedia — we'll set up audio,
+3:07
+networking — set up basic Wi‑Fi, and then touch on external hardware with printing.
+3:14
+The intention of this FreeBSD Friday is primarily to give
+3:20
+options and ideas to people who may have just installed FreeBSD. Perhaps you
+3:26
+heard about it, or have known about it for a little while, and you finally got around to installing it,
+3:32
+got through the installation process, rebooted, and then just sat there thinking, "What next?"
+3:38
+I know personally, the first time I used FreeBSD, I was a little overwhelmed from the lack of a graphical user
+3:45
+interface — I had never used an operating system that didn't automatically boot into one.
+3:50
+So this FreeBSD Friday is hopefully for people like me who were kind of either overwhelmed or a little lost at
+3:57
+the beginning — just to give a couple of ideas on what to do after that.
+4:03
+So, as Deb mentioned, I'll be addressing questions after the presentation, so feel free to put them in
+4:09
+the IRC channel. And I just want to quickly
+4:14
+share the FreeBSD Foundation resource page,
+4:19
+because (let me pull this up for you guys).
+
+4:25
+All right, so as I mentioned, I'm not going to touch 
+4:31
+on a desktop environment during this talk today,
+4:36
+but if that is what interests you, if you watch this FreeBSD Friday and think, "Actually, I do want a graphical user
+4:42
+interface," check out the FreeBSD Foundation Resource page. We have a bunch of guides either on
+4:48
+distributions that have a native desktop environment, or even we have a
+4:55
+video guide and a written guide that I made on installing a desktop environment
+5:02
+from a fresh install like this. So I just wanted to share that just in case that's more your speed.
+5:09
+But today we're going to be working purely command line and touching on these services. So I'm going to share
+5:17
+my FreeBSD instance, which I have running on a VM right now. Awesome.
+5:23
+So we're going to start with audio. So I'm going to be—like I said, I'm using VirtualBox. This is a fresh instance of
+5:30
+FreeBSD. I set it up, I cloned it this morning, so I only made one change, which was
+5:37
+typing out something that I knew I was going to have typos during the presentation, and I didn't want to run
+5:42
+into that. And another thing to note, if you want to
+5:48
+follow along, feel free to try to—I'm going to be going relatively fast, so just know
+5:54
+that this whole session is being recorded. If you want to follow along, you can always go to the YouTube channel—
+6:00
+we're going to have this posted there, and that will be easier to follow along with because you'll be able to
+6:06
+actually pause it and make sure that you're following each step.
+6:11
+So the first thing you're going to want to know if you're setting up audio—you're going to want to know your audio
+6:16
+card and chipset. I'm lucky—I can look over here and I can actually see it right now—but you
+6:23
+might not be that lucky. So if you're going to try to find that, you're going to use dmesg, and you're going to
+6:29
+filter out—so you just (oops, probably typed that wrong)—so you only see
+6:36
+the PCM results, and this will show you your sound card that you're using.
+
+6:44
+Once you have that information, I'm going to once again go back 
+6:49
+to the Foundation website here. You're going to want to go 
+6:55
+to the release information page on freebsd.org. You're going to want to go down to the
+7:00
+release that you're using. You're going to find the release that you're currently using, and you're going
+7:06
+to go over to the Hardware Compatibility List. Once you're here, you can just search for
+7:13
+devices under audio devices
+7:19
+or sound devices, and you're going to find the driver that applies to the
+7:24
+card that you're using. I've done this before, so I know that it's going to be the snd_hda one that I'm using.
+7:36
+And so, snd_hda, there you
+7:42
+go. So this is a driver that supports the controllers that I currently am using. So once you have that information, you're
+7:48
+going to go back to your FreeBSD instance
+7:55
+and you're going to use kldload, and you're going to use that driver. So for me, that's going to be snd_hda
+8:02
+snd_hda. This is already loaded for me. Some
+8:08
+of these modules are automatically loaded, especially the really common ones like this one, but if you have a
+8:15
+less common one that may have just returned to an actual output for you,
+8:21
+you can find more information if you go to the manual pages of these. So if you use man -k snd, it's going
+8:28
+to pull up the manual page for you, so you can see tons of information about the snd drivers.
+8:36
+Once you've checked that sound module, you can add a line to your bootloader
+8:44
+configuration file. So I'm going to use vi, the vi editor, for that.
+
+8:55
+I'm going to go down to the end here, and I'm going to add this line: snd_hda_load.
+9:05
+Cool, "YES", and this is just going to make sure that it's loaded automatically on boot.
+9:11
+If you're having trouble finding the driver
+9:16
+that works with your sound card, there is a meta driver that can load all the
+9:23
+common sound drivers. So if you're trying to follow along and you couldn't identify which one you have, you can
+9:30
+instead do kldload
+9:37
+— make sure I get this right — snd_driver, and this is the meta driver going to load that.
+9:45
+And if you're using this one, you can add the line to your bootloader
+9:50
+configuration file. You can add the line snd_driver_load="YES",
+9:58
+which will do the same thing and load it
+10:04
+on boot. But this is the meta driver that's going to load all those drivers
+10:09
+for you. So there are a couple of ways that you can check now if the sound card has been
+10:16
+detected and properly configured. The first, the easiest one, is to simply run dmesg again — the one that we ran at
+10:23
+the beginning — for PCM results.
+10:33
+And you're going to check that the correct sound card is there and it's at the correct device on pcm0.
+10:43
+You can also check it using cat /dev/sndstat,
+10:53
+which should list the PCM devices that are properly configured. If none are
+11:00
+listed here, you're going to have to go back and make sure that it was properly — perhaps there was a typo — just check to
+11:08
+make sure that you properly configured it in the earlier steps. And finally, in my opinion, the
+11:15
+best way to test audio is to use cat and redirect a file to /dev/dsp.
+11:20
+The name of the file doesn't really matter, so I'm going to use the one I just used, which is /dev/sndstat,
+11:30
+to /dev/dsp. And you won't hear it because I'm using
+11:35
+— I have it in my ear — but if you hit Enter, you'll get a little bit of feedback, and that just shows you that
+11:41
+the sound card is properly configured and actually working in output and sound. And that's basically it. These, like I
+11:48
+said, I'm just going to cover the absolute basics of getting these services set up.
+11:54
+If you want a more in-depth guide, on the FreeBSD Foundation website I have
+11:59
+an audio guide that also will cover setting up Bluetooth audio.
+12:04
+And one of the things that I think a lot of people run into when they're setting up audio on FreeBSD is
+12:11
+automatically switching between outputs, and that is one thing that I cover in
+12:17
+that guide. But like I said, I'm just touching on it today, so we're going to move on to networking — in this case,
+12:23
+specifically Wi‑Fi. Wi‑Fi is kind of one of those things that the first time you do it on FreeBSD
+12:30
+probably will just work, but knowing how to actually configure
+12:35
+it can be helpful if you do end up running into issues. Perhaps you're using
+12:41
+a public network and you've never done that before, perhaps you're using a hidden network
+12:47
+or less common setups. So once again, we're going to need to
+12:54
+identify a card, because a wireless networking card is going to be required to access any
+13:00
+wireless network, and FreeBSD will need to be configured with the correct wireless network support.
+13:07
+Once again, I'm very lucky in that I can actually see I have my Wi‑Fi card, but if
+13:13
+you don't have that going for you, you're going to want to use this:
+13:19
+sysctl dev.wlan.devices — and this is, because I'm using a
+13:26
+virtual machine so that I can live stream this, it is a bridge connection, so FreeBSD
+13:31
+currently thinks that there is an ethernet connection. So when I hit Enter, I'm going to get no results. If you
+13:39
+are on a FreeBSD machine, you will get a result here. Just for this section, it's going to be kind of a "do as I say",
+13:48
+not as I do, because I'm going to be getting some outputs that are going to look a little bit different, but I'll try
+13:54
+to make note of that so that you know when FreeBSD is showing something that you shouldn't expect when
+14:00
+you're doing this. But once you do that, it's going to
+14:06
+actually give you an output that is going to identify your wireless adapter.
+
+14:12
+You can once again go to
+14:18
+the hardware page of the release.
+14:24
+I search for Wi‑Fi, I can go to the wireless network interfaces here.
+14:30
+So I know it's the chipset that I have, that I'm going to be using the 'ath'
+14:36
+driver. You might find that you're using the 'wi'
+14:42
+driver, and that is one that is based on Intersil Prism parts.
+14:48
+I just know that personally I'm using the ath driver.
+14:54
+Going back to FreeBSD here —
+15:00
+awesome. So knowing that I'm using the 'ath' driver, I can go to the bootloader
+15:07
+configuration file again,
+15:13
+and at the very end of this I'm going to add a line that's going to be if_ath_load="YES".
+15:22
+And once again, we're just loading the correct driver for the wireless adapter that I am
+15:27
+using. I'm going to save those changes.
+15:34
+If perhaps you're using a different driver, that's going to change what you enter
+15:40
+there. So let's say I'm using — I mentioned before the 'wi' driver — so I
+15:46
+identified that that is the one that's correct for me. It would be basically the same line, but it would be if_wi_load.
+15:53
+So that's what you would do if you have a
+15:59
+different driver.
+16:05
+I'm going to delete that because that's not applicable to mine.
+
+16:19
+In addition to those lines, you're going to want to add cryptographic support for security protocols.
+16:25
+These are intended to be dynamically loaded by the WLAN module, but you can
+16:33
+actually load those automatically on boot as well. You're going to want to add three lines to your bootloader
+16:41
+configuration. You're going to want to add 
+16:48
+wlan_wep_load="YES",
+16:53
+wlan_ccmp_load="YES",
+17:03
+and wlan_tkip_load="YES".
+17:10
+And this will ensure that these are loaded when it boots. I'm just going to make sure I have no typos here —
+17:16
+a big fear of doing this live stream, having a big typo and not knowing where I did it.
+17:24
+All right, great. And I'm not going to actually reboot right now, but if you did, you would see a message
+17:31
+where it would mention your Wi‑Fi card and that it's enabled.
+17:37
+I'm not going to do it right now because I know it works, and I don't want to waste your time by going through the
+17:44
+whole reboot process. So if you want to find a network, the
+17:51
+easiest way now that you've done that is through 'ifconfig wlan0 scan'.
+17:58
+This is another one where, I believe what I'm
+18:04
+saying — because it's not going to actually work on this, as I said before, I think that it's connected by Ethernet, so when it tries
+18:10
+to scan, it actually doesn't have an interface for that. But you will see a list of available
+18:17
+networks when you do this on your own device. Connecting to a WPA or WPA2
+18:27
+personal network is going to rely on certain security protocols, where you're going to need not only the name of
+18:34
+the network (the SSID), but also a PSK — a pre‑shared key — the password.
+18:42
+In order to make sure that FreeBSD has that information saved so you can join
+18:48
+it and join it again in the future, you're going to want to add a line to
+18:53
+the /etc/wpa_supplicant.conf
+19:01
+configuration file.
+
+19:07
+— make sure I type that correctly. Great. And you're going to want to add a line that looks somewhat like this:
+19:12
+network={ 
+19:19 
+then you're going to put the SSID, or the name of the network. For this one, I'm going to make up a
+19:25
+network; we're going to call it testnetwork" - ssid="testnetwork".
+19:32
+You're then going to add the pre‑shared key, or password, and I'm going to say
+19:37
+this one's password is a very poorly created password - psk="passwd".
+19:44
+And then you can just close your brackets. Something to note: the first time I
+19:51
+ever did this, I was trying to join a hidden network. I tried this a bunch of times to figure
+19:57
+it out, but if the network that you're trying to join is hidden — which some
+20:03
+routers automatically do — you're going to want to add a line that has
+20:10
+scan_ssid=1,
+20:17
+and this is going to let FreeBSD know that the network is not publicly visible.
+20:22
+Once you've done that, save your changes and leave.
+20:30
+And now you're going to have to make sure that FreeBSD knows to configure
+20:36
+into the network on startup. So once again, we're going to edit
+20:42
+/etc/rc.conf.
+20:48
+And we're going to add two lines here at the bottom. We're going to add wlans_ath0="wlan0"
+20:54
+— and then we're going to use the driver that we identified earlier. So I identified that I'm using the ath driver,
+21:00
+but you can replace this with wi driver, whichever one you identified as the one
+21:05
+that you need to use.
+21:13
+Then we're going to add second line 'ifconfig_wlan0="WPA SYNCDHCP"'.
+21:29
+That's wlan0 — and then SYNCDHCP,
+21:37
+which is going to confirm where FreeBSD is going to get the DHCP from.
+21:46
+All right, now that those are saved, you can restart your service. So you
+21:52
+can do this with 'service netif restart',
+21:58
+and it should automatically join the network and allow you to connect to the Wi‑Fi.
+22:05
+So once again, if I hit Enter here, it's going to get very
+22:10
+confused. Actually, I believe I had an error in the actual file here, so let me quickly
+22:16
+fix that — yep, there it is.
+22:22
+I knew there was going to be a typo at some time here today.
+22:33
+All right, now if I run that, it's going to do it, but as you can see
+22:38
+here, it auto‑selected Ethernet. If you do this and you're not on a
+22:44
+bridge connection, it will connect you to the Wi‑Fi. Awesome.
+22:50
+So that's all I'm going to talk about regarding Wi‑Fi. There's a ton more that you could
+22:56
+do with either Wi‑Fi advanced networking — Bluetooth falls underneath that — but
+23:03
+once again, I just wanted to kind of touch on these services today, so we're going to move on to printing. If
+23:10
+you've ever wanted to print from the command line, the first thing that you're going to
+23:16
+need to do is figure out which way that you're going to be connecting to your printer. For me personally, my
+23:23
+printer is on the network, but you could also have a USB printer,
+23:30
+or you could have a parallel port printer. Parallel port is
+23:36
+mostly kind of a legacy port — you won't see many computers having them —
+23:43
+but I am going to mention them just so that if you are on that kind of computer and you are using that kind of port, you
+23:50
+know what to do in that situation. So it's important to note that depending
+23:56
+on your connection, there are going to be device entries that are created on FreeBSD.
+24:02
+If you are using a USB connection, that is going to happen at either
+24:09
+/dev/ulpt0. It's also going to be
+24:17
+created at /dev/unlpt0.
+24:24
+If you are using a parallel port, that's going to be created at /dev/lpt0,
+24:33
+and there's not one created if you're using network instead; you're
+24:39
+going to have to identify the actual DNS of your printer. So I figured that out
+24:47
+earlier. There are a few ways that you can do that. On Windows, you can go to your
+24:53
+devices and printers section and identify that; you can also use your
+25:00
+wireless router to identify which one is connected.
+25:05
+Because you're doing it through the network, there is no way to do this automatically
+25:11
+without knowing the DNS. But since I know that, I'm going to move on
+25:16
+to the next step: I'm going to be using the LPD, or the Line Printer Daemon, to print.
+25:24
+One important thing to note is that you're going to want to be printing in the background — you want to be able to
+25:30
+use other applications, you want to have access to be able to run other commands
+25:36
+while LPD is running. So you're going to want to create a directory in which
+25:42
+files will be stored while they are being printed. So let me clear all this out of your way so you can have a blank
+25:50
+command line. We're going to want to start by making a directory:
+25:58
+mkdir /var/spool/lpd/lp.
+26:05
+Once we've done that, we're going to want to change the owner (chown daemon:daemon /var/spool/lpd/lp)
+26:17
+and then the permissions (chmod 770 /var/spool/lpd/lp).
+26:31
+All right, the directory has been created now, and you're going to want to add some
+26:38
+information to just give LPD some info on where it's being printed, where
+26:44
+the printer is located, whether it is through USB at one of
+26:50
+those two device entries, or if it's going to be over the network. So you're going to go and edit
+26:59
+/etc/printcap. And in order to minimize
+27:06
+typos, I did go ahead before this FreeBSD Friday and create this entry — it's going to be this
+27:13
+section right here, these six lines. You're going to add this to your printcap.
+27:18
+And the specific line that you want to pay close attention to is this first one.
+27:25
+This is for a printer that's been connected over the network, so I have
+27:32
+listed here the DNS so it can identify that. If you are on
+27:39
+a — if you're using a USB connection, you're going to add a completely different line; it's going to look like
+27:49
+lp= and then we're going to go to the place where I mentioned before the
+27:55
+device entry was created. So that's going to be, for a USB, that will be /dev/unlpt0
+28:11
+And if you're using a parallel port — let's delete this line,
+28:17
+add another one — you can add instead
+28:25
+lp=/dev/lpt0.
+28:35
+And so those are the three different ways of connecting. Mine is, like I said, over the network,
+28:40
+so instead of those two lines I'm going to completely delete this one,
+28:46
+and I'm going to make sure that I use this line right here, which has the DNS of my printer.
+28:52
+Once you've done that, you're going to want to save your changes.
+28:57
+You can use the command 'chkprintcap', and this is going to check the format
+29:06
+of the actual file to make sure that you don't have any — you've not formatted
+29:11
+it poorly. It's also going to check if the files that you've listed here actually have actual
+29:18
+destinations. As you can see here, the directory that I created earlier is
+29:24
+listed there as /var/spool/lpd/lp. If I hadn't gone and created that directory
+29:30
+before, I would have gotten an output here that would have said the error: "directory does not exist". So make sure
+29:37
+you run that just to make sure that every step that you've done so far has been done correctly.
+29:44
+All right, so the next step is to actually enable LPD.
+29:49
+So you can enable the daemon by — well, let's set up the entry in /etc/rc.conf
+29:57
+just to make sure that it's automatically loaded,
+30:03
+and you can do that by adding lpd_enable="YES".
+30:09
+Give that a save and quit.
+30:19
+And if you want to start the service right now without rebooting, you can just do 'service lpd start',
+30:28
+and that will show you that it's starting LPD. As with any other service,
+30:33
+if you don't want to be running it, you can just use 'service lpd stop',
+30:40
+and I'll show you that it's stopping the service. I do want to enable it so I can actually print here, though, so restart it.
+30:46
+And now let's print something. It's super easy. I'm going to use the printf command right now to just print a really
+30:53
+basic plain‑text two‑line thing. So I'm going to use printf,
+30:59
+I'm going to use — let's use a numerical — and say "1. Hello World".
+31:09
+I'm then — I'm going to identify that I need these — well, I should probably
+31:14
+spell that correctly. I'm going to create a second line and
+31:21
+say "\n2. This is the second line".
+31:26
+Super creative. Close that out.
+31:32
+Send it to LPD ( | lpd), and if I've done everything correctly — my printer is on — I should, in a couple
+31:39
+seconds — great — and my printer's already starting.
+
+31:46
+So that's a direct way. If your printer is not running, you may have done one of these steps incorrectly. The other
+31:52
+way that you can print directly is if you actually just use the 'lpr' command.
+31:57
+Before I started, I created a text file,
+32:03
+so I created textfile.txt, which once again just says "Hello World".
+32:11
+I can print that text file, as long as it's plain text, using the command lpr 
+32:18
+textfile.txt.
+32:25
+And that will also print through my network printer.
+32:31
+All right, I do want to mention that printing is one of the things that can very quickly
+32:39
+become very complicated. What we've done today is basically set up FreeBSD to
+32:44
+print plain text and print it directly. This will not
+32:50
+work if you have a more complex file, or if, say, your printer requires files to be formatted in
+32:57
+PostScript — you're going to need another entry
+33:06
+to your printcap file. So not only are you going to have
+33:12
+these six lines, you're also going to add a filter line. I'm not going to dive too much into that, but I am going to pull up
+33:18
+the handbook and just show you where you can find more information on that, if you do want to get into filters, which are
+33:23
+super fun but would take a little bit too long to explain in this FreeBSD
+33:29
+Friday. So let me quickly share this page.
+33:35
+All right, great. So if you go to the FreeBSD Handbook, you can find information on
+33:42
+filters, which are essentially just the way that FreeBSD — well, LPD specifically —
+33:48
+will translate and process files. These can be really simple,
+33:53
+where you create a really basic filter,
+33:59
+or you can get really fancy with it and create a smart filter that is
+34:04
+automatically going to identify the type of file input, see exactly what is being
+34:10
+sent to the printer, and automatically convert it to the right format. Once
+34:16
+again, this is just a little bit too much to cover during this FreeBSD Friday, but I did want to give people
+34:24
+a place to go if they wanted to continue learning about filters and different ways of printing.
+34:31
+But now that we've covered that, those are the basics.
+
+34:36
+And basically, all the services that I wanted to cover specifically today — let me put
+34:43
+my screen share. I know that personally, when I start with
+34:48
+a new FreeBSD install, I usually start by setting up a desktop environment, and
+34:55
+I wanted this FreeBSD Friday to be not that, because I think it's really important
+35:00
+— if you are a FreeBSD newbie like I was the first time I ever used FreeBSD —
+35:06
+it's important to know exactly what's happening in the background. Not only are
+35:11
+you going to probably need a network the first time that you try to get a desktop
+35:16
+environment set up, but you're also going to want to know how that network is being configured in
+35:22
+the background. While you're on a desktop environment, you might just click
+35:28
+the Wi‑Fi button, click the networks that you want to join, enter your password, and you'll join. It's
+35:36
+good to know what's happening in the background on FreeBSD itself — that
+35:41
+FreeBSD is scanning for the network, it's found it, it's creating an entry where
+35:47
+it has the SSID and the PSK, so that in the future it accesses that file, and that's
+35:53
+how you join that network. So that's very helpful if you need to troubleshoot in the future, or if you are in a
+36:00
+situation where you are not on a desktop environment and you want to do it purely from the command line.
+36:06
+And I just thought it would be really fun to kind of do a FreeBSD Friday covering how to get those services set up.
+36:12
+So let me try again — I was having trouble accessing the IRC earlier, but I'm going
+36:19
+to try to join that again to see if there's any questions regarding what we've covered
+36:25
+so far. If you have any questions, feel free to share them.
+36:40
+All right, it doesn't look like we have any questions so far.
+
+36:46
+Like I said, if you do have a question, make sure to share it right now so I can try to address it.
+36:57
+Host: Okay, well, I'll step in. That was a great presentation. Thanks, Drew, for that.
+37:04
+I think it's always great to hear folks covering the basic things that we really need when we use a FreeBSD system, and I appreciate how you explained why we do certain things.
+37:16
+So okay, so I am motivated to set up — I don't know if we can see this here because I can't really see my camera — okay, this is my computer. I actually had to dust it off — how embarrassing!
+37:36
+I'm going to set it up with FreeBSD again; it's been a while since I've done that.
+37:41
+And I am going to — so my two goals —
+37:46
+I'm going to give myself a few weeks, so by the end of January (just because we have a lot we're working on right now 
+37:52
+through the end of the year), yeah, I'm going to install the desktop environment 
+37:58
+— that's all — install FreeBSD again, so the latest and greatest, and I'll install a desktop 
+38:04
+environment, and I'll use your how‑to guide on that.
+38:09
+And then I will use your — well, this video — I'll watch again, and my goal would be then to set up the audio on FreeBSD. And like 
+38:17
+you mentioned earlier, there's a quick start guide on that. And if you go to the resource page, because I
+38:23
+just did that, and it's — you can't easily find what you're looking for? We do have a search there, and so I just typed in 
+38:30
+"audio" and it came up right away, which is great.
+38:36
+So a lot of resources there for folks who — if you're off over the holidays and you have time and you need something to do, then go ahead and play around with FreeBSD.
+38:44
+And I guess if you have questions after you watch the recording of those, then you're welcome to send your questions to info@freebsdfoundation.org,
+39:01
+and also questions@freebsd.org, I believe, is another place that you can ask questions.
+39:06
+So just a reminder that this was recorded, and so it'll be posted shortly.
+39:12
+And so where do we post these? On our website? A YouTube channel? On the YouTube channel. Okay, thanks, Sam.
+
+39:24
+And yeah, if you have a topic that you'd love us to cover, if you would like to cover a topic, please let us know. We're working on our plans for 2023, and so we would love to hear those. So anyway, I'd like to say happy holidays
+39:32
+to everyone out there. It is holiday season — whether you celebrate specific holidays or not — it's just a
+39:38
+time of year that we tend to step back, look, reflect on the year, and look at, you know, what do we want to do for the new year. And so anyway, I hope everyone is able
+39:43
+to enjoy your time. And I'll just say on behalf of the
+39:52
+FreeBSD Foundation: thank you, thank you for your donations, thank you for your support, and we really look
+40:00
+forward to supporting you in the new year. And thanks, Drew, and everyone else here behind the scenes.
+40:06
+Thanks, everyone.

@@ -1,0 +1,733 @@
+
+0:09
+well hello everyone I'm Deb goodkin the executive director of the FreeBSD
+0:15
+Foundation thank you for joining us for our last FreeBSD Friday of the year so these
+0:21
+are introductory um presentations on various areas of
+0:27
+FreeBSD and they're all recorded so you can access them in the future and if you
+0:32
+have any um ideas or topics that you'd like us to cover in 2023 please post them here for
+0:41
+us and we'll try to cover them next year so before I introduce our speaker today
+0:47
+I would just like to send out one last plea actually won't be my last but
+0:52
+another plea for you and folks that you know and companies that you work for to
+0:59
+consider making a donation to us the FreeBSD Foundation when you invest or
+1:05
+when you donate to us it is a an investment in FreeBSD the advancement of
+1:11
+FreeBSD and it helps us find software development projects to improve
+1:17
+free vsd it helps us fund FreeBSD advocacy work and all around the world
+1:24
+it helps us fund training and a coursework for bringing new folks into
+1:31
+the project so please consider making a donation and we'll put the URL in the
+1:37
+IRC Channel so moving on to our presenter for today
+1:43
+actually before I introduced him I if you have any questions during his talk
+1:49
+go ahead and post them either in the IRC Channel actually I think that's the only
+1:55
+place you can post it so we'll put information there for you so today our presentation is an
+2:03
+introduction to FreeBSD Services by Drew Gurkowski so let me tell you a
+2:08
+little bit about Drew started working on FreeBSD D documentation for the foundation as an
+2:15
+intern in 2015. and he continued as a consultant starting in 2018.
+2:21
+as of 2020 Drew began working full-time for us as a marketing coordinator
+2:28
+he lives in New York City and he recently built a new computer from scratch so he could learn more about
+2:35
+computers and that whole process so now I'll hand it off to Drew
+2:43
+awesome thank you so much for the introduction um so my name is Drew yukowski
+2:48
+um and today's FreeBSD Friday um it's just gonna touch um on a few of the services that can be
+2:55
+enabled right out of box on a fresh FreeBSD install so I want to touch on uh three
+3:01
+specific types of services so I'm going to touch my multimedia we're going to set up audio
+3:07
+networking set up basic Wi-Fi and then touch on external hardware with printing
+3:14
+the intention of this 350 Friday is primarily to give
+3:20
+options and ideas to people who may have just installed FreeBSD um perhaps you
+3:26
+heard about it um or have known for about it for a little while and you finally got about installing it
+3:32
+um got through the installation process uh rebooted and then just sat there thinking what next
+3:38
+um I know personally the first time I used tree BSD I was a little overwhelmed from the lack of a uh graphical user
+3:45
+interface I had never used the operating system that didn't automatically boot into one
+3:50
+um so this frequency Friday is hopefully into people like me who were kind of either overwhelmed or a little lost at
+3:57
+the beginning uh just give a couple ideas on uh what to do after that
+4:03
+um so uh as Deb mentioned I'll be addressing questions uh after the presentation so feel free to put them in
+4:09
+the uh the IR feature um and I just want to quickly
+4:14
+um share the freebies Foundation uh Resource page
+4:19
+because let me pull this up for you guys
+4:25
+all right so as I mentioned uh I'm not going to touch on
+4:31
+to a desktop environment uh during this talk today
+4:36
+but if that is what interests you if you watch this FreeBSD Friday and think actually I do want a graphical user
+4:42
+interface uh check out the FreeBSD Foundation Resource page um we have a bunch of guides either on
+4:48
+distributions that have a native desktop environment or even we have a
+4:55
+video guide and a written guide that I made on installing a desktop environment
+5:02
+from a fresh install like this uh so I just wanted to share that just in case that's that's more your speed
+5:09
+um but today we're going to be working purely McMahon line and uh touching on these services so I'm going to share
+5:17
+my FreeBSD D instance which I have running on a VM right now awesome
+5:23
+so we're going to start with uh audio so I'm going to be like I said I'm using virtualbox this is a fresh instance of
+5:30
+FreeBSD um I set it up I cloned it this morning um so I only made one change which was
+5:37
+typing out something that I knew I was going to have typos during the presentation and I didn't want to run
+5:42
+into that um and another thing to note if you want to
+5:48
+follow along um feel free to try to I'm going to be going relatively fast so uh just know
+5:54
+that this whole session is being recorded if you want to follow along you can always go to the YouTube channel
+6:00
+we're going to have this posted there and that will be easier to follow along with because uh you'll be able to
+6:06
+actually pause it and make sure that you're following each step
+6:11
+so uh the first thing you're going to want to know if you're setting up audio you're going to want to know your audio
+6:16
+card and chipset um I'm lucky I can look over here and I can actually see it right now but uh you
+6:23
+might not be that lucky so uh if you're gonna try to find that you're gonna use uh D message uh and you're going to
+6:29
+filter out so you just oops probably type that right so you only see
+6:36
+the PCM results and this will show you uh your the sound card that you're using
+6:44
+um once you have that information I'm going to once again go back to
+6:49
+Foundation website here you're going to want to go to the
+6:55
+release information page on freebsd.org you're going to want to go down to the
+7:00
+release that you're using um you're going to find the release that you're currently using and you're going
+7:06
+to go over to Hardware compatibility list once you're here you can just search for
+7:13
+leave us under audio devices
+7:19
+or sound devices and you're going to find the driver that applies to the uh
+7:24
+the card that you're using I've done this before so I know that it's going to be the SMD HDA one that I'm using
+7:36
+and so s d forward slash underscore HDA there you
+7:42
+go so this is a driver that supports the controllers that I currently am using so once you have that information you're
+7:48
+going to go back to your FreeBSD instance
+7:55
+and you're going to use klb load um and you're going to use that driver so I for me that's going to be snd
+8:02
+underscore HDA uh this is already loaded for me uh some
+8:08
+of these modules are automatically loaded especially the really common ones uh like this one uh but if you have a
+8:15
+less common one that may have uh just returned to an actual uh output for you
+8:21
+um you can find info more information if you go to the manual pages of these so if you use a man Dash K SMD it's going
+8:28
+to pull up the uh manual page for you so you can see tons of information about the s d drivers
+8:36
+um once you've checked that sound module um you can add a line to your bootloader
+8:44
+configuration file so I'm going to use VI the vi editor for that [Applause]
+8:55
+I'm going to go down to the end here and I'm going to add this line SMD underscore HDA unders for load
+9:05
+cool yes and this is just going to make sure that it's loaded um automatically on boots
+9:11
+[Applause] if uh you're having trouble finding the driver
+9:16
+that works with your sound card there is a meta driver that can load all the
+9:23
+common sound drivers so if you're trying to follow along and you couldn't identify which one you have you can
+9:30
+instead do kld load
+9:37
+make sure I get this right SMD underscore driver and this is the meta driver going to load that
+9:45
+and if you're using this one you can add the line to your bootloader
+9:50
+configuration file you can add the line SMD underscore driver
+9:58
+mode which will do the same thing and load it
+10:04
+on boot but this is the meta driver that's going to load all those drivers
+10:09
+for you so there's a couple ways that you can check now if the sound card has been
+10:16
+detected and properly configured the first the easiest one is to Simply run the message again the one that we ran at
+10:23
+the beginning foreign PCM results
+10:33
+and you're going to check that the correct sound card is there and it's at the correct uh device on PCI zero
+10:43
+you can also check it using cat slash Dev plus FNB stat
+10:53
+which should list the PCM devices that are properly configured if none are
+11:00
+listed here you're going to have to go back and make sure that it was properly perhaps there was a typo just check to
+11:08
+make sure that you properly configured it in the earlier steps um and finally the uh in my opinion the
+11:15
+best way to test uh audio is to use cat and you're going to use file name
+11:20
+this the name of the file doesn't really matter so I'm going to use the one I just used which is Dev SMD stats
+11:30
+to Dev slash DSP and you won't hear it because I'm using um
+11:35
+uh I have it in my ear but if you hit enter you'll get a little bit of a feedback and that just shows you that
+11:41
+the sound card is properly configured and actually working in output and sound and that's basically it um these like I
+11:48
+said I'm just going to cover like the absolute basics of getting these Services set up
+11:54
+um if you want a more in-depth guide uh on the FreeBSD Foundation website I have
+11:59
+a audio guide that also will cover setting up Bluetooth audio
+12:04
+um and one of the things that I think a lot of people run into when they're uh setting up audio on FreeBSD is
+12:11
+automatically switching between outputs um and that is one thing that I cover in
+12:17
+that guide but like I said I'm just touching on it today so we're going to move on to networking in this case
+12:23
+specifically Wi-Fi Wi-Fi is kind of one of those things that the first time you do it on FreeBSD
+12:30
+probably will just work um but knowing how to actually configure
+12:35
+it can be helpful if you do end up running into issues perhaps you're using
+12:41
+a public network and you've never done that before perhaps you're using a hidden network
+12:47
+or less common setups so once again we're going to need to
+12:54
+identify a card um because a wireless networking card is going to be required to access any
+13:00
+wireless network and FreeBSD will need to be configured to the correct wireless network support
+13:07
+once again I'm very lucky in that I can actually see I have my Wi-Fi card but if
+13:13
+you don't have that going for you you're going to want to use this
+13:19
+bplnet.w a n dot devices and this is um because I'm using a
+13:26
+virtual machine so that I can live stream this um it is a bridge connection so FreeBSD
+13:31
+currently thinks that there is an ethernet connection um so when I hit enter I'm going to get no results uh if you
+13:39
+are on a FreeBSD machine you will get a result here uh just for this section it's going to be kind of a do as I I say
+13:48
+um not as I do because I'm going to be getting some outputs that are going to look a little bit different but I'll try
+13:54
+to make note of that so that you know when when FreeBSD is showing something that that you shouldn't expect when
+14:00
+you're doing this but once you do that it's going to
+14:06
+actually give you an output that uh is going to identify your wireless adapter
+14:12
+you can once again go to
+14:18
+the hardware page of the release
+14:24
+I search Wi-Fi I can go to the wireless network interfaces
+14:30
+here so I know it's the chipset that I have that I'm going to be using the ath
+14:36
+driver um you might find that you're using the wi
+14:42
+driver um and that is one that are based on um uh
+14:48
+intracell prism Parts um I just know that personally I'm using the ath
+14:54
+to go back to FreeBSD here
+15:00
+awesome so knowing that I'm using the ath driver I can use I can go to the bootloader
+15:07
+configuration file again
+15:13
+and the area very end of this I'm going to add um a line that's going to be if underscore
+15:22
+ACH underscore load
+15:27
+and once again we're just loading the correct driver um for the wireless adapter that I am
+15:34
+using I'm going to save those changes
+15:40
+if uh perhaps you're using a different driver um that's going to change what you enter
+15:46
+there so let's say I'm using uh I mentioned before the wi driver so I
+15:53
+identified that that is the one that's correct for me it would be basically the same line but it would be if underscore
+15:59
+would be I underscore load
+16:05
+foreign that's what you would do if you have a
+16:10
+uh a different driver I'm going to delete that because that's not applicable to mine
+16:19
+in addition to those lines you're going to want to add cryptographic support for security protocols
+16:25
+um these are intended to be dynamically loaded by the WLAN module but you can
+16:33
+actually load those automatically on boot as well you're going to want to add three lines uh to your boot loader
+16:41
+configuration you're going to want to add WLAN underscore wcp
+16:48
+I'm gonna load that
+16:53
+pcmp
+17:03
+and pkip
+17:10
+and this will ensure that these are loaded when he boots I'm just going to make sure I have no typos here
+17:16
+uh a big fear of doing this live stream having a big typo not knowing where I did it
+17:24
+all right great and I'm not going to actually reboot right now but if if you did uh you would see a message
+17:31
+um where it would it would mention uh your Wi-Fi card um and that it's enabled
+17:37
+um I'm not going to do it right now because I I know it works and I don't want to waste uh your time by going through the
+17:44
+whole uh reboot process so uh if you want to find a network the
+17:51
+easiest way now that you've done that is through ifconfig
+17:58
+scan um so this is another one where it's going to be uh uh I believe what I'm
+18:04
+saying because it's not going to actually work on this as I said before I think that it's connected by ethernet so when it tries
+18:10
+to scan it actually doesn't have an interface for that um but you will see a list of available
+18:17
+networks when you do this on your own device um connecting to a WPA or WPA to
+18:27
+um personal network is going to rely on certain security protocols where you're going to need not only the name of the
+18:34
+um the network so the SSID but also um a psk appreciated key the password
+18:42
+in order to make sure that FreeBSD has that information saved so you can join
+18:48
+it and join it again in the future you're going to want to add a line to
+18:53
+the ETC WPA underscore supplicants
+19:01
+configuration file
+19:07
+make sure I type that correctly great um and you're going to want to add a line that looks somewhat like this so
+19:12
+net worth
+19:19
+but then you're going to put the SSID or the name of the network for this one I'm going to make up a
+19:25
+network we're going to call it test Network
+19:32
+you're then going to add the pre-shared key or password and I'm going to say
+19:37
+this one's password a very poorly um created password
+19:44
+um and then you can just close your brackets um something to note the first time I
+19:51
+ever did this I was trying to join a hidden network um I tried this a bunch of times to figure
+19:57
+it out but if the network that you're trying to join is hidden which some
+20:03
+routers automatically do you're going to want to add a line that has
+20:10
+scam underscore SSID equals one
+20:17
+and this is going to let FreeBSD know that the network is not publicly visible
+20:22
+once you've done that favor changes and leave
+20:30
+and now you're gonna have to make sure that uh that uh FreeBSD knows to configure
+20:36
+into the network on Startup so once again we're going to edit
+20:42
+Etc rc.com
+20:48
+and we're going to add two lines here at the bottom we're going to add w-l-a-n-s
+20:54
+and then we're going to use the driver that we identified earlier so I identified that I'm using the ath driver
+21:00
+but you can replace this with CWI driver whichever one you identify is the one
+21:05
+that you need to use
+21:13
+foreign
+21:24
+equals WPA
+21:29
+that's why n c h c p
+21:37
+which is going to confirm where uh FreeBSD  is going to get the DHCP from
+21:46
+all right now that those are saved you can restart uh your uh service so you
+21:52
+can do this with service metis
+21:58
+restart and it should automatically uh join the network and allow you to to uh
+22:05
+connect to the Wi-Fi so once again if I hit enter here it's going to get very
+22:10
+confused um actually I believe I had a error in the actual file here so let me quickly
+22:16
+fix that yep there it is
+22:22
+I knew there was going to be a type of some time here today
+22:33
+all right now if I run that it's gonna do it but it as you can see
+22:38
+here it uh Auto selected ethernet um if you do this and you're not on a
+22:44
+bridge connection it will connect you to the Wi-Fi awesome
+22:50
+so that's all I'm going to talk about regarding Wi-Fi um there's a ton more that you could uh
+22:56
+do with either uh Wi-Fi Advanced networking um Bluetooth Falls underneath that but
+23:03
+once again I just wanted to kind of touch on these services today so we're going to move on to printing if
+23:10
+you've ever wanted to print from the command line so the first thing that you're going to
+23:16
+need to do uh is figure out which way that you're going to be connecting to your printer for me personally my
+23:23
+printer is on the network but you could also have a USB printer
+23:30
+um or you could have a parallel port printer parallel port is
+23:36
+mostly uh kind of a legacy Port uh you won't see many computers having them
+23:43
+but I am going to mention them just so that if you are on that kind of computer and you are using that kind of Port you
+23:50
+know what to do in that situation um so it's important to note that depending
+23:56
+on your connection there's going to be device entries that are created on free
+24:02
+PSD if you are using a USB connection that is going to happen at either Dev
+24:09
+slash ulpt0 it's also going to happen it's also
+24:17
+going to be created at Dev slash u m lpc0
+24:24
+um if you're you are using a parallel port that's going to be created at Dev lpt0
+24:33
+and you're not there's not one created if you're using network instead you're
+24:39
+going to have to identify the actual DNS of your printer so I I figured that out
+24:47
+earlier there's a few ways that you can do that on Windows you can go to your
+24:53
+devices and printers section and identify that you can also use your
+25:00
+wireless router to identify which one is connected um
+25:05
+because you're doing it through the network there's no way to do this automatically
+25:11
+um without knowing the DNS but since I know that I'm going to move on
+25:16
+to the next step I'm going to use I'm going to be using the LTD or the line printer Daemon to print
+25:24
+one important thing to note is that you're going to want to be printing in the background do you want to be able to
+25:30
+use other applications you want to have access to be able to run other commands
+25:36
+while LPD is running so you're going to want to create a directory in which
+25:42
+files will be stored while they are being printed so let me clear all this out of your way so you can have a blank
+25:50
+um command line we're going to want to start by making a directory
+25:58
+school plus LPD LP uh once we've done that we're going to
+26:05
+want to change the owner
+26:17
+and then the permission foreign
+26:31
+all right the directory has been created now and you're going to want to add some
+26:38
+information uh to just give LPD uh some info on where it's being printed where
+26:44
+where where the printer is located um whether it is through USB at one of
+26:50
+those two device entries or if it's going to be over the network so you're going to go and edit
+26:59
+Etc print cap and in order to minimize
+27:06
+typos I did go ahead and before the FreeBSD Friday I did create this entry it's going to be this uh section
+27:13
+right here these six lines you're going to add this to your um print cap
+27:18
+and the specific line that you want to make you want to pay close attention to is this first one
+27:25
+this is um if this is for a printer that's been connected to over the networks so I have
+27:32
+listed here the DNS um so it can identify that if you are on
+27:39
+a if you're using a USB connection you're going to add a completely different line it's going to look like
+27:49
+LP equals and then we're going to go to the place where I mentioned before the
+27:55
+device entry was created so that's going to be for a USB that will be Dev un lpt
+28:06
+stay around
+28:11
+and if you're using a parallel port let's delete this line
+28:17
+add another one you can add instead
+28:25
+LP says slash lpt zero
+28:35
+and so those are the three different ways of connecting um mine is like I said over the network
+28:40
+so instead of those two lines I'm going to complete delete this one
+28:46
+and I'm going to make sure that I use this line right here which has the DNS of my printer
+28:52
+once you've done that you're going to want to change so you save your changes
+28:57
+you can use the command check print cap and this is going to check the format
+29:06
+of the actual file to make sure that you don't have any uh you've not formatted
+29:11
+it poorly it's also going to check if the files that you've listed here actually have like have actual
+29:18
+destinations as you can see here I'm the directory that I created earlier is
+29:24
+listed there as of our school LPD LP if I hadn't gone and created that directory
+29:30
+before I would have gotten an output here that would have said the error um directory does not exist so make sure
+29:37
+you run that just to make sure that every steps that you've done so far has been done correctly
+29:44
+all right so the next step is to actually enable LPD
+29:49
+um so you can enable the Daemon by on well let's set up uh the entry in ECC
+29:57
+rc.com just to make sure that it's uh automatically loaded
+30:03
+and you can do that by adding LPD so LPD
+30:09
+underscore enable so yes
+30:19
+give them quits um and if you want to start service right now without rebooting you can just do a service LTD starts
+30:28
+and that will show you that it's starting LPD um as with any other service
+30:33
+um if you don't want to be running it you can just use service LPD stop
+30:40
+um and I'll show you that it's stopping the service I do want to enable so I can actually print here though so restart it
+30:46
+and now let's print something uh it's super easy I'm going to use the printf command right now to just print a really
+30:53
+basic plain text two line um thing so I'm going to use print
+30:59
+f I'm going to use let's use a numerical and say hello world
+31:09
+um I'm then I'm going to identify that I need these well I should probably
+31:14
+spell that correctly I'm going to create a second line and
+31:21
+say this is the second line
+31:26
+super creative um close that out
+31:32
+LPD and if I've done everything correctly my printer is on I should in a couple
+31:39
+seconds great and my printer's already starting
+31:46
+um so that's a direct way if your printer is not running you may have done one of these steps incorrectly the other
+31:52
+way that you can print directly is if you actually just use the LPR command
+31:57
+before uh I started I created a text file
+32:03
+um so I created text file.txt which once again just says hello world
+32:11
+I can print that text file as long as it's plain text using the command LPR
+32:18
+file Dot txt
+32:25
+and that will also print through my overlay Network
+32:31
+all right I do want to mention that printing is one of the things that can very quickly
+32:39
+become very complicated what we've done today is basically set up FreeBSD to
+32:44
+print plain text um and print it directly this will not
+32:50
+work if you have a more complex file um or if you're say your printer requires uh files to be format added in
+32:57
+PostScript you're going to need another entry um to
+33:06
+your print cap file so not only are you going to have
+33:12
+these six lines you're also going to add a filter line I'm not going to dive too much into that but I am going to pull up
+33:18
+the handbook and just show you where you can find more information on that if you do want to get into filters which are
+33:23
+super fun but would take a little bit too long to explain in this FreeBSD
+33:29
+Friday so let me quickly share this page
+33:35
+all right great so if you go to the FreeBSD handbook um uh uh you can find information on
+33:42
+filters which are essentially just the way that FreeBSD well LTD specifically
+33:48
+um will translate and process files these can be really simple
+33:53
+um where you create a really basic filter um
+33:59
+or you can get really fancy with it and create a smart filter that is
+34:04
+automatically going to identify the type of file input see exactly what is being
+34:10
+sent to the printer and automatically convert it to the right format once
+34:16
+again this is just a little bit too too much to cover during this freeBSD Friday but I did want to give people
+34:24
+um a place to go if they wanted to continue learning about filters and different ways of printing
+34:31
+but now that we've covered that um those are the basics
+34:36
+um and basically all the services that I wanted to cover specifically today let me put
+34:43
+my screen share I know that personally when I start with
+34:48
+a a new FreeBSD install I usually start by setting up a desktop environment and
+34:55
+I wanted this FreeBSD Friday to be not that um because I think it's really important
+35:00
+to if you are a freebies newbie like I was the first time I ever used FreeBSD
+35:06
+uh it's important to know exactly what's happening in the background not only are
+35:11
+you going to probably need a network the first time that you try to get a desktop
+35:16
+environment set up um but you're also going to want to know how that network is being configured in
+35:22
+the background while you're on a a desktop environment you might just click
+35:28
+the Wi-Fi button click the networks that you want to join enter your password and you'll join it's
+35:36
+good to know what's happening in the background on FreeBSD itself that
+35:41
+FreeBSD is scanning for the network it's found it's it's creating an entry where
+35:47
+it has the SSID and the psk so that in future it accesses that file and that's
+35:53
+how you join that Network so that's very helpful for if you need to troubleshoot in the future or if you are in a
+36:00
+situation where you are not on a desktop environment and you want to do it purely from the command line
+36:06
+um and I just thought it would be really fun to kind of do a FreeBSD Friday covering how to get those Services set up
+36:12
+so um let me try again I was having trouble accessing the IRC earlier but I'm going
+36:19
+to try to join that again to see if there's any questions regarding what we've covered
+36:25
+so far if you have any questions feel free to share them
+36:40
+all right it doesn't look like we have any questions so far
+36:46
+um like I said if you if you do have a question uh make sure to share it right now so you can try to address it
+36:57
+okay well I'll step in um that was a great presentation thanks Drew for giving Matt
+37:04
+um I think it's always great to hear like folks covering
+37:09
+um like the basic things that we really need when we use FreeBSD e-system and I I appreciate how you explained like why
+37:16
+we do certain things and so okay so I am motivated to set up
+37:22
+my I don't know if we can see this here because I can't really see
+37:28
+my camera okay this is my computer I actually had a dust It Off how embarrassing
+37:36
+I'm gonna set it up with FreeBSD again it's been a while since I've done that um
+37:41
+and I am going to so my two goals and
+37:46
+I'm gonna give myself a few weeks so by the end of January uh just because we have a lot we're working on right now
+37:52
+through the end of the year yeah I'm gonna install the shop environment and
+37:58
+that's all I installed FreeBSD again so the latest and greatest and I'll install a desktop
+38:04
+um environment and I'll use your how-to guide on that and then I will use your
+38:09
+um well this video I'll watch again and I'll I'll my goal would be then to set up the audio on a FreeBSD and like
+38:17
+you mentioned earlier there's a um there's a quick start guide on that and if you go to the resource page because I
+38:23
+just did those um and it's not and you can't easily find what you're looking for we do have a search there and so I just typed in
+38:30
+audio and it came up right away which is great so a lot of resources there for folks who
+38:36
+um if you're off over the holidays and you have time and you need something to do then go ahead and play around with
+38:44
+FreeBSD and um I guess if you have questions
+38:49
+um after you watch the recording of those then you're welcome between to the
+38:55
+questions you can always send it to info freebsdfoundation.org
+39:01
+and also questions at freebsd.org I believe is another place
+39:06
+that you get asked questions so just reminder that this was recorded and so
+39:12
+it'll be posted shortly and um so where do we post these on our
+39:18
+website a YouTube channel on the YouTube channel okay thanks Sam and
+39:24
+um um and yeah and if you if you have a topic that you'd love us to cover if you would
+39:32
+like to cover a topic please let us know we're working on our plans for 2023 and
+39:38
+so we would love to hear those so anyway I'd like to say happy holidays
+39:43
+to everyone out there it is holiday season whether you celebrate um specific holidays or not it's just uh
+39:52
+time of year that we tend to step back look reflect on the year and look at you
+40:00
+know what do we want to do for the new year and um so anyway I I hope everyone is able
+40:06
+to enjoy enjoy your time and I'll just stay on behalf of the
+40:13
+FreeBSD Foundation thank you thank you for your donations thank you for your support and we really look
+40:19
+forward to supporting you in the new year and thanks Drew and everyone else here behind the scenes
+40:26
+thanks everyone
